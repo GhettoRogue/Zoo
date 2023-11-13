@@ -1,11 +1,11 @@
-﻿using ZooParkApp.animals;
-using ZooParkApp.interfaces;
+﻿using ZooParkApp.models.animals;
+using ZooParkApp.models.interfaces;
 
-namespace ZooParkApp.aviaries;
+namespace ZooParkApp.models.aviaries;
 
 public class AquaAviary : Aviary
 {
-    public AquaAviary(int totalCount) : base(totalCount)
+    public AquaAviary(string name, int count) : base(name, count)
     {
     }
 
@@ -15,7 +15,7 @@ public class AquaAviary : Aviary
 
         if (animal is not ISwimming) return false;
         
-        animals.Add(animal);
+        Animals.Add(animal);
         return true;
     }
 }

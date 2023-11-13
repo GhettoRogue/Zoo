@@ -62,10 +62,11 @@ package animals {
 package aviaries {
     Animal <--o Aviary
     abstract class Aviary {
+        + name : string
         + totalCount : int
         + animals : Animal[]
         
-        # Aviary(count : int)
+        # Aviary(name : string, count : int)
         
         + {abstract} AddAnimal(animal : Animal) : bool
         # IsFree() : bool
@@ -73,78 +74,131 @@ package aviaries {
     
     Aviary <|-- AquaAviary
     Animal <-- AquaAviary
-    ISwimming <.. AquaAviary
+    'ISwimming <.. AquaAviary
     class AquaAviary {
-        + AquaAviary(totalCount : int)
+        + AquaAviary(name : string, totalCount : int)
         
         + AddAnimal(animal : Animal) : bool
     }
     
     Aviary <|-- LandAviary
     Animal <-- LandAviary
-    IWalking <.. LandAviary
+    'IWalking <.. LandAviary
     class LandAviary {
-        + LandAviary(totalCount : int)
+        + LandAviary(name : string, totalCount : int)
                 
         + AddAnimal(animal : Animal) : bool
     }
 }
 
 package creators {
+    interface ICreator <<T>> {
+        + Create() : T
+    }
     package animals {
+        ICreator <|.. AnimalCreator
         Animal <--o AnimalCreator
         abstract class AnimalCreator
         {
-            + {abstract} Create(kind : string) : Animal
+            # kind : string
+            
+            # AnimalCreator(kind : string)
+            
+            + {abstract} Create() : Animal
         }
         
         AnimalCreator <|-- BirdCreator
-        Bird <.. BirdCreator
+        'Bird <.. BirdCreator
         class BirdCreator {
-            + Create(kind : string) : Animal
+            + BirdCreator(kind : string)
+            
+            + Create() : Animal
         }
         
         AnimalCreator <|-- FishCreator
-        Fish <.. FishCreator
+        'Fish <.. FishCreator
         class FishCreator {
-            + Create(kind : string) : Animal
+            + FishCreator(kind : string)
+            
+            + Create() : Animal
         }
         
         AnimalCreator <|-- MammaliaCreator
-        Mammalia <.. MammaliaCreator
+        'Mammalia <.. MammaliaCreator
         class MammaliaCreator {
-            + Create(kind : string) : Animal
+            + MammaliaCreator(kind : string)
+        
+            + Create() : Animal
         }
         
         AnimalCreator <|-- InsectCreator
-        Insect <.. InsectCreator
+        'Insect <.. InsectCreator
         class InsectCreator {
-            + Create(kind : string) : Animal
+            + InsectCreator(kind : string)
+        
+            + Create() : Animal
         }
     }
     
     package aviaries {
-    
         Aviary <--o AviaryCreator
         abstract class AviaryCreator
         {
-            + {abstract} Create(count : int) : Aviary
+            # name : string
+            # count : int
+            
+            # AviaryCreator(name : string, count : int)
+            
+            + {abstract} Create() : Aviary
         }
         
         AviaryCreator <|-- LandAviaryCreator
-        LandAviary <.. LandAviaryCreator
+        'LandAviary <.. LandAviaryCreator
         class LandAviaryCreator
         {
-            + Create(count : int) : Aviary
+            + LandAviaryCreator(name : string, count : int)
+            
+            + Create() : Aviary
         }
         
         AviaryCreator <|-- AquaAviaryCreator
-        AquaAviary <.. AquaAviaryCreator
+        'AquaAviary <.. AquaAviaryCreator
         class AquaAviaryCreator
         {
-            + Create(count : int) : Aviary
+            + AquaAviaryCreator(name : string, count : int)
+            
+            + Create() : Aviary
         }
     }
+}
+
+enum AnimalType {
+    Bird
+    Fish
+    Insect
+    Mammalia
+}
+
+enum AviaryType {
+    Aqua
+    Land
+}
+
+Aviary <--o Zoo
+Animal <--o Zoo
+AnimalType <-- Zoo
+AviaryType <-- Zoo
+'AviaryCreator <.. Zoo
+'AnimalCreator <.. Zoo
+class Zoo{
+    + totalAviaries : int
+    + aviaries : Aviary[]
+    + animals : Animal[]
+    
+    + Zoo()
+    
+    + AddAnimal(kind : string, animalType : AnimalType, aviary : Aviary) : bool
+    + AddAviary(name : string, count : int, aviaryType : AviaryType) : bool
 }
 
 @enduml

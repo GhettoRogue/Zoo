@@ -1,11 +1,15 @@
-﻿using ZooParkApp.animals;
+﻿using ZooParkApp.models.animals;
 
-namespace ZooParkApp.creators;
+namespace ZooParkApp.creators.animals;
 
 public class FishCreator : AnimalCreator
 {
-    public override Animal Create(string kind)
+    public FishCreator(string kind) : base(kind)
     {
-        return new Fish(kind);
+    }
+
+    public override Animal Create()
+    {
+        return new Fish(Kind);
     }
 }

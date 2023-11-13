@@ -1,4 +1,4 @@
-﻿namespace ZooParkApp.interfaces;
+﻿namespace ZooParkApp.models.interfaces;
 
 public interface IWalking
 {

@@ -1,6 +1,6 @@
-﻿using ZooParkApp.interfaces;
+﻿using ZooParkApp.models.interfaces;
 
-namespace ZooParkApp.animals;
+namespace ZooParkApp.models.animals;
 
 public class Fish : Animal, ISwimming
 {

@@ -1,11 +1,11 @@
-﻿using ZooParkApp.animals;
-using ZooParkApp.interfaces;
+﻿using ZooParkApp.models.animals;
+using ZooParkApp.models.interfaces;
 
-namespace ZooParkApp.aviaries;
+namespace ZooParkApp.models.aviaries;
 
 public class LandAviary : Aviary
 {
-    public LandAviary(int count) : base(count)
+    public LandAviary(string name, int count) : base(name, count)
     {
     }
 
@@ -15,7 +15,7 @@ public class LandAviary : Aviary
 
         if (animal is not (IFlying or IWalking)) return false;
         
-        animals.Add(animal);
+        Animals.Add(animal);
         return true;
     }
 }

@@ -1,0 +1,150 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+package interfaces {
+    interface IFlying {
+        + {abstract} Flying() : string
+    }
+    
+    interface ISwimming {
+        + {abstract} Swimming() : string
+    }
+    
+    interface IWalking {
+        + {abstract} Walking() : string
+    }
+}
+
+package animals {
+    abstract class Animal {
+        + kind : string
+        
+        # Animal(kind : string)
+    }
+    
+    Animal <|-- Bird
+    IFlying <|.. Bird
+    IWalking <|.. Bird
+    class Bird {
+        + Bird(kind : string)
+        
+        + Flying() : string
+        + Walking() : string
+    }
+    
+    Animal <|-- Fish
+    ISwimming <|.. Fish
+    class Fish {
+        + Fish(kind : string)
+        
+        + Swimming() : string
+    }
+    
+    Animal <|-- Mammalia
+    IWalking <|.. Mammalia
+    class Mammalia {
+        + Mammalia(kind : string)
+        
+        + Walking() : string
+    }
+    
+    Animal <|-- Insect
+    IFlying <|.. Insect
+    IWalking <|.. Insect
+    class Insect {
+        + Insect(kind : string)
+        
+        + Flying() : string
+        + Walking() : string
+    }
+}
+
+package aviaries {
+    Animal <--o Aviary
+    abstract class Aviary {
+        + totalCount : int
+        + animals : Animal[]
+        
+        # Aviary(count : int)
+        
+        + {abstract} AddAnimal(animal : Animal) : bool
+        # IsFree() : bool
+    }
+    
+    Aviary <|-- AquaAviary
+    Animal <-- AquaAviary
+    ISwimming <.. AquaAviary
+    class AquaAviary {
+        + AquaAviary(totalCount : int)
+        
+        + AddAnimal(animal : Animal) : bool
+    }
+    
+    Aviary <|-- LandAviary
+    Animal <-- LandAviary
+    IWalking <.. LandAviary
+    class LandAviary {
+        + LandAviary(totalCount : int)
+                
+        + AddAnimal(animal : Animal) : bool
+    }
+}
+
+package creators {
+    package animals {
+        Animal <--o AnimalCreator
+        abstract class AnimalCreator
+        {
+            + {abstract} Create(kind : string) : Animal
+        }
+        
+        AnimalCreator <|-- BirdCreator
+        Bird <.. BirdCreator
+        class BirdCreator {
+            + Create(kind : string) : Animal
+        }
+        
+        AnimalCreator <|-- FishCreator
+        Fish <.. FishCreator
+        class FishCreator {
+            + Create(kind : string) : Animal
+        }
+        
+        AnimalCreator <|-- MammaliaCreator
+        Mammalia <.. MammaliaCreator
+        class MammaliaCreator {
+            + Create(kind : string) : Animal
+        }
+        
+        AnimalCreator <|-- InsectCreator
+        Insect <.. InsectCreator
+        class InsectCreator {
+            + Create(kind : string) : Animal
+        }
+    }
+    
+    package aviaries {
+    
+        Aviary <--o AviaryCreator
+        abstract class AviaryCreator
+        {
+            + {abstract} Create(count : int) : Aviary
+        }
+        
+        AviaryCreator <|-- LandAviaryCreator
+        LandAviary <.. LandAviaryCreator
+        class LandAviaryCreator
+        {
+            + Create(count : int) : Aviary
+        }
+        
+        AviaryCreator <|-- AquaAviaryCreator
+        AquaAviary <.. AquaAviaryCreator
+        class AquaAviaryCreator
+        {
+            + Create(count : int) : Aviary
+        }
+    }
+}
+
+@enduml

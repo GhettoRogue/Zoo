@@ -1,108 +1,121 @@
 ﻿@startuml
 'https://plantuml.com/class-diagram
 
-package interfaces {
-    interface IFlying {
-        + {abstract} Flying() : string
+package models {
+    package interfaces {
+        interface IFlying {
+            + {abstract} Flying() : string
+        }
+        
+        interface ISwimming {
+            + {abstract} Swimming() : string
+        }
+        
+        interface IWalking {
+            + {abstract} Walking() : string
+        }
     }
     
-    interface ISwimming {
-        + {abstract} Swimming() : string
+    package animals {
+        abstract class Animal {
+            + kind : string
+        }
+        
+        Animal <|-- Bird
+        IFlying <|.. Bird
+        IWalking <|.. Bird
+        class Bird {            
+            + Flying() : string
+            + Walking() : string
+        }
+        
+        Animal <|-- Fish
+        ISwimming <|.. Fish
+        class Fish {
+            + Swimming() : string
+        }
+        
+        Animal <|-- Mammalia
+        IWalking <|.. Mammalia
+        class Mammalia {
+            + Walking() : string
+        }
+        
+        Animal <|-- Insect
+        IFlying <|.. Insect
+        IWalking <|.. Insect
+        class Insect {
+            + Flying() : string
+            + Walking() : string
+        }
     }
     
-    interface IWalking {
-        + {abstract} Walking() : string
+    package aviaries {
+        Animal <--o Aviary
+        abstract class Aviary {
+            + name : string
+            + totalCount : int
+            + animals : Animal[]
+            
+            + {abstract} AddAnimal(animal : Animal) : bool
+            + IsFree() : bool
+        }
+        
+        Aviary <|-- AquaAviary
+        Animal <-- AquaAviary
+        'ISwimming <.. AquaAviary
+        class AquaAviary {
+            + AddAnimal(animal : Animal) : bool
+        }
+        
+        Aviary <|-- LandAviary
+        Animal <-- LandAviary
+        'IWalking <.. LandAviary
+        class LandAviary {
+            + AddAnimal(animal : Animal) : bool
+        }
     }
 }
 
-package animals {
-    abstract class Animal {
-        + kind : string
-        
-        # Animal(kind : string)
+package loggers {
+    interface ILogger{
+        + {abstract} Info(message : string) : void
+        + {abstract} Error(message : string) : void
+        + {abstract} Success(message : string) : void
     }
     
-    Animal <|-- Bird
-    IFlying <|.. Bird
-    IWalking <|.. Bird
-    class Bird {
-        + Bird(kind : string)
-        
-        + Flying() : string
-        + Walking() : string
+    ILogger <|.. LogToConsole
+    class LogToConsole {
+        - Print(message : string, color : ConsoleColor) : void
+        + Info(message : string) : void
+        + Error(message : string) : void
+        + Success(message : string) : void
     }
     
-    Animal <|-- Fish
-    ISwimming <|.. Fish
-    class Fish {
-        + Fish(kind : string)
+    ILogger <|.. LogToFile
+    class LogToFile {
+        - path : string
         
-        + Swimming() : string
-    }
+        + LogToFile(path : string)
     
-    Animal <|-- Mammalia
-    IWalking <|.. Mammalia
-    class Mammalia {
-        + Mammalia(kind : string)
-        
-        + Walking() : string
-    }
-    
-    Animal <|-- Insect
-    IFlying <|.. Insect
-    IWalking <|.. Insect
-    class Insect {
-        + Insect(kind : string)
-        
-        + Flying() : string
-        + Walking() : string
-    }
-}
-
-package aviaries {
-    Animal <--o Aviary
-    abstract class Aviary {
-        + name : string
-        + totalCount : int
-        + animals : Animal[]
-        
-        # Aviary(name : string, count : int)
-        
-        + {abstract} AddAnimal(animal : Animal) : bool
-        # IsFree() : bool
-    }
-    
-    Aviary <|-- AquaAviary
-    Animal <-- AquaAviary
-    'ISwimming <.. AquaAviary
-    class AquaAviary {
-        + AquaAviary(name : string, totalCount : int)
-        
-        + AddAnimal(animal : Animal) : bool
-    }
-    
-    Aviary <|-- LandAviary
-    Animal <-- LandAviary
-    'IWalking <.. LandAviary
-    class LandAviary {
-        + LandAviary(name : string, totalCount : int)
-                
-        + AddAnimal(animal : Animal) : bool
+        - Write(message : string) : void
+        + Info(message : string) : void
+        + Error(message : string) : void
+        + Success(message : string) : void
     }
 }
 
 package creators {
+    ILogger <--* ICreator
     interface ICreator <<T>> {
+        + Logger : ILogger
         + Create() : T
     }
     package animals {
         ICreator <|.. AnimalCreator
         Animal <--o AnimalCreator
-        abstract class AnimalCreator
-        {
-            # kind : string
-            
-            # AnimalCreator(kind : string)
+        abstract class AnimalCreator {
+            + kind : string
             
             + {abstract} Create() : Animal
         }
@@ -141,13 +154,12 @@ package creators {
     }
     
     package aviaries {
+        ICreator <|.. AviaryCreator
         Aviary <--o AviaryCreator
         abstract class AviaryCreator
         {
-            # name : string
-            # count : int
-            
-            # AviaryCreator(name : string, count : int)
+            + name : string
+            + count : int
             
             + {abstract} Create() : Aviary
         }
@@ -156,8 +168,6 @@ package creators {
         'LandAviary <.. LandAviaryCreator
         class LandAviaryCreator
         {
-            + LandAviaryCreator(name : string, count : int)
-            
             + Create() : Aviary
         }
         
@@ -165,40 +175,40 @@ package creators {
         'AquaAviary <.. AquaAviaryCreator
         class AquaAviaryCreator
         {
-            + AquaAviaryCreator(name : string, count : int)
-            
             + Create() : Aviary
         }
     }
 }
 
-enum AnimalType {
-    Bird
-    Fish
-    Insect
-    Mammalia
-}
+package zoo {
+    enum AnimalType {
+        Unknown
+        Bird
+        Fish
+        Insect
+        Mammalia
+    }
 
-enum AviaryType {
-    Aqua
-    Land
-}
+    enum AviaryType {
+        Unknown
+        Aqua
+        Land
+    }
 
-Aviary <--o Zoo
-Animal <--o Zoo
-AnimalType <-- Zoo
-AviaryType <-- Zoo
-'AviaryCreator <.. Zoo
-'AnimalCreator <.. Zoo
-class Zoo{
-    + totalAviaries : int
-    + aviaries : Aviary[]
-    + animals : Animal[]
-    
-    + Zoo()
-    
-    + AddAnimal(kind : string, animalType : AnimalType, aviary : Aviary) : bool
-    + AddAviary(name : string, count : int, aviaryType : AviaryType) : bool
+    Aviary <--o Zoo
+    Animal <--o Zoo
+    AnimalType <-- Zoo
+    AviaryType <-- Zoo
+    'AviaryCreator <.. Zoo
+    'AnimalCreator <.. Zoo
+    class Zoo{
+        + totalAviaries : int
+        + aviaries : Aviary[]
+        + animals : Animal[]
+        
+        + AddAnimal(kind : string, animalType : AnimalType, aviary : Aviary) : bool
+        + AddAviary(name : string, count : int, aviaryType : AviaryType) : bool
+    }
 }
 
 @enduml

@@ -2,5 +2,9 @@
 
 public enum AnimalType
 {
-    Unknown, Bird, Fish, Insect, Mammalia
+    Unknown,
+    Bird,
+    Fish,
+    Insect,
+    Mammalia
 }

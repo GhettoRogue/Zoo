@@ -2,5 +2,7 @@
 
 public enum AviaryType
 {
-    Unknown, Aqua, Land
+    Unknown,
+    Aqua,
+    Land
 }

@@ -4,21 +4,10 @@ namespace ZooParkApp.models.aviaries;
 
 public abstract class Aviary
 {
-    public readonly string Name;
-    public readonly int TotalCount;
-    public readonly List<Animal> Animals;
-
-    protected Aviary(string name, int count)
-    {
-        this.Name = name;
-        TotalCount = count;
-        Animals = new List<Animal>(TotalCount);
-    }
+    public string Name { get; init; }
+    public int TotalCount { get; init; }
+    public List<Animal> Animals { get; init; } = new();
+    public bool IsFree => Animals.Count < TotalCount;
 
     public abstract bool AddAnimal(Animal animal);
-
-    protected bool IsFree()
-    {
-        return Animals.Count < TotalCount;
-    }
 }

@@ -1,15 +1,12 @@
-﻿using ZooParkApp.models.animals;
+﻿using ZooParkApp.loggers;
+using ZooParkApp.models.animals;
 
 namespace ZooParkApp.creators.animals;
 
 public abstract class AnimalCreator : ICreator<Animal>
 {
-    protected readonly string Kind;
+    public string Kind { get; init; }
 
-    protected AnimalCreator(string kind)
-    {
-        this.Kind = kind;
-    }
-
+    public ILogger? Logger { get; init; }
     public abstract Animal Create();
 }

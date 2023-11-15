@@ -4,12 +4,8 @@ namespace ZooParkApp.creators.animals;
 
 public class BirdCreator : AnimalCreator
 {
-    public BirdCreator(string kind) : base(kind)
-    {
-    }
-    
     public override Animal Create()
     {
-        return new Bird(Kind);
+        return new Bird { Kind = Kind };
     }
 }

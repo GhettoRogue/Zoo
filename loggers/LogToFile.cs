@@ -6,15 +6,9 @@ public class LogToFile : ILogger
 
     public LogToFile(string path)
     {
-        this._path = path;
+        _path = path;
     }
 
-    private void Write(string message)
-    {
-        using var file = new StreamWriter(_path, append: true);
-        file.WriteLine($"{DateTime.Now:g} {message}");
-    }
-    
     public void Info(string message)
     {
         Write($"[{nameof(Info).ToUpper()}] {message}");
@@ -28,5 +22,11 @@ public class LogToFile : ILogger
     public void Success(string message)
     {
         Write($"[{nameof(Success).ToUpper()}] {message}");
+    }
+
+    private void Write(string message)
+    {
+        using var file = new StreamWriter(_path, true);
+        file.WriteLine($"{DateTime.Now:g} {message}");
     }
 }

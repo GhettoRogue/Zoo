@@ -1,88 +1,40 @@
-﻿using ZooParkApp.zoo;
+﻿using ZooParkApp.loggers;
+using ZooParkApp.ui;
+using ZooParkApp.zoo;
 
-var zoo = new Zoo() {TotalAviaries = 2};
-
-do
+var count = ConsoleHelper.InputInt("Введите количество вольеров зоопарка:");
+var zoo = new Zoo()
 {
-    var exit = false;
+    TotalAviaries = count,
+    Logger = new LogToFile("zoo.log")
+};
 
-    Console.WriteLine("Выберите тип вольера:");
-    Console.WriteLine("1. Водный");
-    Console.WriteLine("2. Сухопутный");
-    Console.WriteLine("0. Завершить добавление вольеров");
-    var inputAviary = Console.ReadLine();
-    var aviaryType = AviaryType.Unknown;
-    switch (inputAviary)
+while (true)
+{
+    ConsoleHelper.SleepAndClear();
+    
+    ConsoleHelper.PrintLine("Режим работы:");
+    ConsoleHelper.PrintLine("1. Добавление вольеров");
+    ConsoleHelper.PrintLine("2. Добавление животных");
+    ConsoleHelper.PrintLine("3. Просмотр всех животных");
+    ConsoleHelper.PrintLine("4. Просмотр всех вольеров");
+    ConsoleHelper.PrintLine("0. Выход");
+    var mode = ConsoleHelper.InputString("Введите номер режима:");
+    switch (mode)
     {
-        case "1": // 1. Водный
-            aviaryType = AviaryType.Aqua;
+        case "0":
+            return;
+        case "1":
+            ZooHelper.AddAviaries(zoo);
             break;
-        case "2": // 2. Сухопутный
-            aviaryType = AviaryType.Land;
+        case "2":
+            ZooHelper.AddAnimals(zoo);
             break;
-        case "0": // 0. Завершить добавление вольеров
-            exit = true;
+        case "3":
+            ZooHelper.PrintAnimals(zoo.Animals);
+            break;
+        case "4":
+            ZooHelper.PrintAviaries(zoo.Aviaries);
             break;
     }
-
-    if (exit) break;
-
-    Console.Write("Введите название вольера:");
-    var name = Console.ReadLine();
-    Console.Write("Введите количество животных:");
-    var count = Convert.ToInt32(Console.ReadLine());
-    var result = zoo.AddAviary(name, count, aviaryType);
-    Console.WriteLine(result ? "Вольер успешно добавлен" : "Ошибка добавления вольера");
-} while (true);
-
-do
-{
-    var exit = false;
-
-    Console.WriteLine("Выберите животное для добавления в вольер:");
-    Console.WriteLine("1. Рыба");
-    Console.WriteLine("2. Птица");
-    Console.WriteLine("3. Млекопитающее");
-    Console.WriteLine("4. Насекомое");
-    Console.WriteLine("0. Завершить добавление животных");
-
-    var inputAnimal = Console.ReadLine();
-    var animalType = AnimalType.Unknown;
-    switch (inputAnimal)
-    {
-        case "1": // 1. Рыба
-            animalType = AnimalType.Fish;
-            break;
-        case "2": // 2. Птица
-            animalType = AnimalType.Bird;
-            break;
-        case "3": // 3. Млекопитающее
-            animalType = AnimalType.Mammalia;
-            break;
-        case "4": // 4. Насекомое
-            animalType = AnimalType.Insect;
-            break;
-        case "0": // 0. Завершить добавление животных
-            exit = true;
-            break;
-    }
-
-    if (exit) break;
-
-    Console.Write("Введите вид животного:");
-    var kind = Console.ReadLine();
-
-    Console.Write("Введите название вольера:");
-    var aviaryName = Console.ReadLine();
-    var aviary = zoo.Aviaries.Single(a => a.Name == aviaryName);
-
-    var result = zoo.AddAnimal(kind, animalType, aviary);
-
-    Console.WriteLine(result ? "Животное успешно добавлено" : "Ошибка добавления животного");
-} while (true);
-
-foreach (var aviary in zoo.Aviaries)
-{
-    Console.WriteLine($"{aviary.GetType().Name}: total animals - {aviary.TotalCount}");
-    foreach (var animal in aviary.Animals) Console.WriteLine($"{animal.GetType().Name} -> {animal.Kind}");
 }
